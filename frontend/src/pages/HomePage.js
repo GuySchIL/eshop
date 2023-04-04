@@ -1,10 +1,11 @@
-import { useEffect, useReducer, useState } from 'react';
-import { Link } from 'react-router-dom';
-import data from '../data';
+import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Product from '../components/Product';
+import { Helmet } from 'react-helmet-async';
+import LoadingComponent from '../components/LoadingComponent';
+import MessageBox from '../components/MessageBox';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -46,14 +47,17 @@ function HomePage() {
 
   return (
     <div>
+      <Helmet>
+        <title>EShop</title>
+      </Helmet>
       <h1>Products</h1>
       <div className="products">
         {loading ? (
-          <p>Loading...</p>
+          <LoadingComponent />
         ) : error ? (
-          <p>{error}</p>
+          <MessageBox variant="danger">{error}</MessageBox>
         ) : (
-          <Row>
+          <Row className="row">
             {products.map((product) => (
               <Col key={product.token} lg={3} md={4} sm={6} className="mb-3">
                 <Product product={product}></Product>

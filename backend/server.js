@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import seedRouter from './routes/seedRoutes.js';
+import productRouter from './routes/productRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -12,21 +14,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/v1/users', userRouter);
 app.use('/api/v1/seed', seedRouter);
-
-app.use('/api/v1/product/token/:token', (req, res) => {
-  const product = data.products.find((x) => x.token === req.params.token);
-  if (product) {
-    res.send(product);
-  } else {
-    res.status(404).send({ message: 'Product was not found' });
-  }
-});
-
-//Endpoints
-app.get('/api/v1/products', (req, res) => {
-  res.send(data.products);
+app.use('/api/v1/products', productRouter);
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
 });
 
 mongoose
