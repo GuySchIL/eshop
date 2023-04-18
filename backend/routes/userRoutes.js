@@ -4,9 +4,9 @@ import expressAsyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils.js';
 
-const userRouteR = express.Router();
+const userRouter = express.Router();
 
-userRouteR.post(
+userRouter.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
@@ -25,4 +25,23 @@ userRouteR.post(
   })
 );
 
-export default userRouteR;
+userRouter.post(
+  '/signup',
+  expressAsyncHandler(async (req, res) => {
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password),
+    });
+    const user = await newUser.save();
+
+    res.send({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user),
+    });
+  })
+);
+
+export default userRouter;
