@@ -8,6 +8,7 @@ import { Store } from '../store';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
+// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function CartPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -19,15 +20,19 @@ function CartPage() {
   } = state;
 
   const updateCartHandler = async (item, quantity) => {
-    const { data } = await axios.get(`/api/v1/products/${item._id}`);
-    if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
-      return;
+    try {
+      const { data } = await axios.get(`/api/v1/products/${item._id}`);
+      if (data.countInStock < quantity) {
+        window.alert('Sorry. Product is out of stock');
+        return;
+      }
+      ctxDispatch({
+        type: 'ADD_TO_CART',
+        payload: { ...item, quantity },
+      });
+    } catch (err) {
+      ctxDispatch({ type: 'GET_FAIL', payload: err.message });
     }
-    ctxDispatch({
-      type: 'ADD_TO_CART',
-      payload: { ...item, quantity },
-    });
   };
 
   const removeItemHandler = async (item) => {

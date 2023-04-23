@@ -10,10 +10,11 @@ function ShippingAddressPage() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
-    fullBox,
+    // fullBox,
     userInfo,
     cart: { shippingAddress },
   } = state;
+
   const [fullName, setFullName] = useState(shippingAddress.fullName || '');
   const [address, setAddress] = useState(shippingAddress.address || '');
   const [city, setCity] = useState(shippingAddress.city || '');
@@ -38,7 +39,7 @@ function ShippingAddressPage() {
         city,
         postalCode,
         country,
-        location: shippingAddress.location,
+        // location: shippingAddress.location,
       },
     });
     localStorage.setItem(
@@ -49,15 +50,15 @@ function ShippingAddressPage() {
         city,
         postalCode,
         country,
-        location: shippingAddress.location,
+        // location: shippingAddress.location,
       })
     );
     navigate('/payment');
   };
 
-  useEffect(() => {
-    ctxDispatch({ type: 'SET_FULLBOX_OFF' });
-  }, [ctxDispatch, fullBox]);
+  // useEffect(() => {
+  //   ctxDispatch({ type: 'SET_FULLBOX_OFF' });
+  // }, [ctxDispatch, fullBox]);
 
   return (
     <div>
@@ -115,14 +116,14 @@ function ShippingAddressPage() {
             />
           </Form.Group>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <Button
               id="chooseOnMap"
               type="button"
               variant="light"
               onClick={() => navigate('/map')}
             >
-              Chooe Location On Map
+              Choose Location On Map
             </Button>
             {shippingAddress.location && shippingAddress.location.lat ? (
               <div>
@@ -132,7 +133,7 @@ function ShippingAddressPage() {
             ) : (
               <div>No Location</div>
             )}
-          </div>
+          </div> */}
 
           <div className="mb-3">
             <Button variant="primary" type="submit">
